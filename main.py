@@ -24,6 +24,9 @@ except ImportError:
 
 import auth
 
+def messageform(sender, recepient, subject, emailbody):
+    return sendInst.create_message(sender, recepient, subject, emailbody)
+
 
 SCOPES = 'https://mail.google.com/'
 CLIENT_SECRET_FILE = 'client_secret.json'
@@ -37,11 +40,30 @@ service = discovery.build('gmail', 'v1', http=http)
 sendDate = datetime.datetime.now().strftime('%m/%d/%Y')
 sendInst = send_email.send_email(service)
 sender = "john@atlasswitch.com"
-recepientList = "john.paradise117@gmail.com" #Test recepient
 subject = "Quotes to Follow Up " + sendDate
-#emailbody = QuoteSpreadsheet.EmailBody()
-emailbody = "testing"
 
-#assembling the email to send
-message = sendInst.create_message(sender, recepientList, subject, emailbody)
+
+#Go through each employee and send
+emailbody = QuoteSpreadsheet.emailSubBodySalesman("Harris")
+message = messageform(sender, "harris@atlasswitch.com", subject, emailbody)
 sendInst.send_message('me', message)
+
+emailbody = QuoteSpreadsheet.emailSubBodySalesman("Steve")
+message = messageform(sender, "steve@atlasswitch.com", subject, emailbody)
+sendInst.send_message('me', message)
+
+emailbody = QuoteSpreadsheet.emailSubBodySalesman("Matt")
+message = messageform(sender, "matthew@atlasswitch.com", subject, emailbody)
+sendInst.send_message('me', message)
+
+#if new salesman, add similar to above
+
+emailbody = QuoteSpreadsheet.emailSubBodyExec("John")
+message = messageform(sender, "john@atlasswitch.com", subject, emailbody)
+sendInst.send_message('me', message)
+
+emailbody = QuoteSpreadsheet.emailSubBodyExec("Gina")
+message = messageform(sender, "gina@atlasswitch.com", subject, emailbody)
+sendInst.send_message('me', message)
+
+#if new exec, add similar to above
